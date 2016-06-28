@@ -15,4 +15,9 @@ Route::get('/', function () {
     return view('map');
 });
 
+Route::get('/radius', function () {
+    return view('radius');
+});
+
+
 //Route::post('/text', 'Controller@postForm');
