@@ -4,17 +4,28 @@
 @section('content')
 <?php
 	//$entries = App\Models\Conflict::take(40)->groupBy('year','location')->orderBy('year')->get();
-	$entries = App\Models\Conflictgeo::where('year','>','2000')->groupBy('year','version')->orderBy('year')->get();
-	//Conflictgeo
+	//$entries = App\Models\Conflictgeo::where('year','>','2000')->groupBy('year','version')->orderBy('year')->get();
 
-	foreach ($entries as $key => $entry) {
-		$entry = $entry->conflict;
-	}
+	$entries = \DB::table('conflict_geo')
+        ->join('conflict', function($join)
+        {
+            $join->on('conflict.id', '=', 'conflict_geo.id')
+            ->where('conflict.Region', '=', '4')
+            ->where('conflict_geo.year','>','2000');
+        })
+        ->get();
+
+    //    dd($entries[450]);
+//
+	//foreach ($entries as $key => $entry) {
+	//	$entry = $entry->conflict;
+	//}
 
 	//$entries = $entries
 
 	//dd($entries[1]->toArray());
-	$conflicts = $entries->toJson();
+	//$conflicts = $entries->toJson();
+	$conflicts = json_encode($entries);
 	//dd($conflicts);
 	$entries = count($entries);
 	//dd($entries->toArray());
@@ -81,6 +92,8 @@ function initMap() {
 	            });
 	        	//apply lines
 	        	flightPath.setMap(map);
+
+	        	console.log(i);
         }
 	    }, 100*(i+1));
 
