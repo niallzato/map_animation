@@ -13,7 +13,7 @@
 
 	//$entries = $entries
 
-	//dd($entries[1]);
+	//dd($entries[1]->toArray());
 	$conflicts = $entries->toJson();
 	//dd($conflicts);
 	$entries = count($entries);
