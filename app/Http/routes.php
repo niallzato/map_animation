@@ -19,5 +19,14 @@ Route::get('/radius', function () {
     return view('radius');
 });
 
+Route::get('/d3', function () {
+    return view('d3');
+});
+
+Route::get('/d3/map', function () {
+    return view('d3-map');
+});
+
+Route::post('/data', 'Controller@statedata');
 
 //Route::post('/text', 'Controller@postForm');

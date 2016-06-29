@@ -4,52 +4,52 @@
         <title>Laravel</title>
 
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+    <link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <style>
             html, body {
                 height: 100%;
             }
 
             body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                display: table;
                 font-weight: 100;
                 font-family: 'Lato';
             }
 
             .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
             }
 
             .content {
                 text-align: center;
                 display: inline-block;
+                width: 100%;
             }
 
             .title {
-                font-size: 96px;
+                font-size: 22px;
+            }
+            .text-center{
+                text-align:center;
             }
         </style>
     </head>
     <body>
-        <div class="container">
-            <div class="content">
-                <div class="title">Laravel 5 stuffffff</div>
-                <?php
-                    $person = new App\Myclasses\person;
+        <div class="container-fluid">
+            <?php
+                $person = new App\Myclasses\person;
 
-                    $name = $person->getName('niall');
+                $name = $person->getName('niall');
 
-                    $conflicts = App\Models\Conflict::take(10)->get()->toJson();
+                $conflicts = App\Models\Conflict::take(10)->get()->toJson();
 
-                    //dd($conflicts);
-                ?>
-                 @yield('content')
-            </div>
+                //dd($conflicts);
+            ?>
+             @yield('content')                
+
         </div>
     </body>
 </html>

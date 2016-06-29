@@ -30,6 +30,7 @@
 	$entries = count($entries);
 	//dd($entries->toArray());
 ?>
+ <div class="title">Laravel 5 stuffffff</div>
  <div id="map" style="height:400px;"></div>
     <script>
 

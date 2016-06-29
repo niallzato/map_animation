@@ -19,7 +19,54 @@
 	$conflicts = json_encode($entries);
 	$entries = count($entries);
 ?>
- <div id="map" style="height:400px;"></div>
+<div class="row title text-center">
+    <div class="col-xs-12 year">&nbsp</div>
+    <div class="col-xs-12 conflict">&nbsp</div>
+</div>
+<div class="row">
+  <div class="col-xs-3">
+  <form method="post" name="controls" action="/data">
+
+    <h1>Options</h1>
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+    <input id="Africa" type="checkbox" name="site[]" value="4" />
+    <label for="Africa">Africa</label>
+    <br />
+    <input id="Asia" type="checkbox" name="site[]" value="3" />
+    <label for="Asia">East Asia</label>
+    <br />
+    <input id="ME" type="checkbox" name="site[]" value="2" />
+    <label for="ME">Middle East</label>
+    <br />
+    <input id="South America" type="checkbox" name="site[]" value="5" />
+    <label for="South America">Americas</label>
+    <br />
+    <input id="Europe" type="checkbox" name="site[]" value="1" />
+    <label for="Europe">Europe</label>
+
+    <br>
+    <br>
+
+    <input type="number" name="start" id="start" value='1984'>
+    <label for="start">Start Date</label>
+
+    <input type="number" name="end" id="end" value='2008'>
+    <label for="end">End Date</label>
+
+    <br>
+
+    <button type="submit">Submit</button>
+    
+  </form>
+
+  <button type="button">start</button>
+  </div>
+  <div class="col-xs-9" id="map" style="height:calc(100vh - 55px);">
+    
+  </div> 
+</div>
+
     <script>
 
       var data =  JSON.parse({!!json_encode($conflicts)!!});
@@ -34,27 +81,31 @@
   var colors = gradient(startColor,endColor,steps);
 
 function initMap() {
+
+  var first = new google.maps.LatLng(data[0]['lat'], data[0]['long']);
+
   var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 1,
-    center: {lat: 0, lng: -180},
+    zoom: 2,
+    center: first,
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
 
-  var first = new google.maps.LatLng(data[0]['lat'], data[0]['long']);
+  
 
   	//loop through conflicts add lines
 	$( document ).ready(function() {
 	    $.each(data, function(i, item) {
 
+        var stateactors = actors(data[i]['SideA'],data[i]['SideA2nd'],data[i]['SideB'],data[i]['Sideb2nd']);
 
-	setTimeout(function(){ 
+      	setTimeout(function(){ 
 
-
+        
 
         var myLatLng = {lat: data[i]['lat'], lng: data[i]['long']};
 
         var infowindow = new google.maps.InfoWindow({
-          content: data[i]['Location']+' '+data[i]['SideB']
+          content: '<p>'+data[i]['year']+'</p>'+stateactors
         });
 
         var marker = new google.maps.Marker({
@@ -78,11 +129,10 @@ function initMap() {
             radius: data[i]['radius']*1000
           });
 
-
-
+        $('.year').html(data[i]['year']);
+        $('.conflict').html(stateactors);
         //console.log(data[i]['year'])
-
-	    }, 100*(i+1));
+	    }, 1000*(i+1));
 
 		});
 	});
@@ -119,6 +169,18 @@ function initMap() {
              return stepsHex;
 
          }
+
+  function actors(SideA, SideA2nd, SideB, SideB2nd){
+
+    if (SideA2nd) {
+      SideA = SideA+' & '+SideA2nd;
+    }
+
+    if (SideB2nd) {
+      SideB = SideB+' & '+SideB2nd;
+    }
+    return SideA+" vs "+SideB;
+  }         
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCJ2QDtWbXyzJ0Qufu3pK2BGPgp2X9mq0&callback=initMap"
