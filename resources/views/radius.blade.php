@@ -56,11 +56,11 @@
 
     <br>
 
-    <button type="submit">Submit</button>
+    <button class="start" type="button">start</button>
     
   </form>
 
-  <button type="button">start</button>
+
   </div>
   <div class="col-xs-9" id="map" style="height:calc(100vh - 55px);">
     
@@ -80,20 +80,22 @@
 
   var colors = gradient(startColor,endColor,steps);
 
-function initMap() {
+    function initMap() {
 
-  var first = new google.maps.LatLng(data[0]['lat'], data[0]['long']);
+      var first = new google.maps.LatLng(data[0]['lat'], data[0]['long']);
 
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 2,
-    center: first,
-    mapTypeId: google.maps.MapTypeId.TERRAIN
-  });
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 2,
+        center: first,
+        mapTypeId: google.maps.MapTypeId.TERRAIN
+      });
 
+      return map;
+    }
   
 
   	//loop through conflicts add lines
-	$( document ).ready(function() {
+	function animateMap(data,map){
 	    $.each(data, function(i, item) {
 
         var stateactors = actors(data[i]['SideA'],data[i]['SideA2nd'],data[i]['SideB'],data[i]['Sideb2nd']);
@@ -135,8 +137,8 @@ function initMap() {
 	    }, 1000*(i+1));
 
 		});
-	});
-}
+	};
+
 
 	function gradient(startColor, endColor, steps){
              var start = {
@@ -170,19 +172,32 @@ function initMap() {
 
          }
 
-  function actors(SideA, SideA2nd, SideB, SideB2nd){
+      function actors(SideA, SideA2nd, SideB, SideB2nd){
+        if (SideA2nd) {
+          SideA = SideA+' & '+SideA2nd;
+        }
+        if (SideB2nd) {
+          SideB = SideB+' & '+SideB2nd;
+        }
+        return SideA+" vs "+SideB;
+      }   
 
-    if (SideA2nd) {
-      SideA = SideA+' & '+SideA2nd;
-    }
 
-    if (SideB2nd) {
-      SideB = SideB+' & '+SideB2nd;
-    }
-    return SideA+" vs "+SideB;
-  }         
+      function submitForm(){
+          var url = $('form').attr("action");
+          var formData = $('form').serializeArray();
+          console.log(formData);
+          $.post(url, formData).done(function (data) {
+            initMap();
+            animateMap(data,map);
+          });
+
+      }
+
+      $('.start').click(function(){
+        submitForm();
+      });      
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCJ2QDtWbXyzJ0Qufu3pK2BGPgp2X9mq0&callback=initMap"
-    async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCJ2QDtWbXyzJ0Qufu3pK2BGPgp2X9mq0&callback=initMap" async defer></script>
 @endsection
